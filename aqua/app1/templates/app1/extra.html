@@ -1,0 +1,29 @@
+-  Filter dropdown sites by the logged-in sub-admin's permissions.
+
+
+modify this api "class Model1View(APIView):
+permission_classes = [IsAuthenticated]
+
+def post(self, request, *args, **kwargs):
+    serializer = Model1Serializer(data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)" this is serializer "class Model1Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = Model1
+        fields = '__all__'
+
+    def update(self, instance, validated_data):
+    
+        for field, value in validated_data.items():
+            setattr(instance, field, value)
+        instance.save()
+        return instance" if i post this data {
+    "device_id": "device123",
+    "feed_low_level_switch": true,
+    "permeate_flow": 10.5,
+    "feed_conductivity": 200.0,
+    "system_running": true
+} 
+so in response i want only posted data 
